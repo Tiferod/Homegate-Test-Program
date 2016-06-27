@@ -214,5 +214,22 @@ public class Homegate{
 	        return "The partner " + partner.getName() +" has been associated to this homegate.";
     	}
     }
+    
+    public boolean gotHome() {
+    	RestTemplate restTemplate = new RestTemplate();
+    	String body = restTemplate.getForObject(link, String.class);
+    	return body.indexOf("homes") != -1;
+    }
+    
+    public String getHomeId() {
+    	if (gotHome()) {
+    		RestTemplate restTemplate = new RestTemplate();
+        	String body = restTemplate.getForObject(link, String.class);
+        	return body.substring(body.indexOf("homes") + 6, body.indexOf("homegate", body.indexOf("homes") + 6) - 1);
+    	}
+    	else {
+    		return "There is no home attached to this homegate";
+    	}
+    }
 }
 

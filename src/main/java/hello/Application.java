@@ -34,6 +34,7 @@ public class Application implements CommandLineRunner {
     	Scanner sc = new Scanner(System.in);
     	boolean b = true;
     	Homegate homegate = new Homegate();
+    	Home home = new Home();
     	while (b) {
     		System.out.println("\nPlease enter the serial number of the homegate you want to test :");
     		str = sc.next();
@@ -42,28 +43,105 @@ public class Application implements CommandLineRunner {
     		}
     	}
     	System.out.println(homegate.toString());
-    	System.out.println("\nThe test will now create a home for the homegate to be associated to.\nWrite anything and press Enter to continue.");
-		str = sc.next();
-    	//Partner partner = new Partner("Dorian", "4123");
-    	//System.out.println(partner.postPartner());
-    	//System.out.println(homegate.addPartner(partner));
-    	System.out.println(homegate.toString());
-    	Location location = new Location("44.920675", "4.266843");
-    	Adress adress = new Adress("30 rue du 19 mars 1962", "30190", "La Calmette", "FR", location);
-    	Home home = new Home("Dorian", "Paret", "1956", "1495", "none", "Europe/Oslo", "Bonjour", adress);
-    	home.setHomeId("57332eb4e4b01ef6eadb4dc4");
-    	System.out.println(home.update());
-    	System.out.println(home.addHomegate(homegate));
-    	System.out.println(home.update());
-    	home.deleteUsers();
+    	if (homegate.gotHome()) {
+    		System.out.println("\nYour homegate is already attached to a home. Its Id is : " + homegate.getHomeId() + ".");
+    		b = true;
+    		while (b) {
+    			System.out.println("\nDo you want to detach it ? Y/N\n");
+        		str = sc.next();
+        		if (str.startsWith("Y")) {
+        			Home home1 = new Home();
+        			home1.setHomeId(homegate.getHomeId());
+        			System.out.println(home1.detachHomegate(homegate));
+        			while (b) {
+        				System.out.println("\nAdditionnaly, do you want to delete this home ? Y/N\n");
+        	    		str = sc.next();
+        	    		if (str.startsWith("Y")) {
+        	    			System.out.println(home1.deleteHome());
+        	    			b = false;
+        	    		}
+        	    		else if (str.startsWith("N")) {
+        	    			b = false;
+        	    		}
+        	    	}
+        			System.out.println("\nTherefore, we need a home to add your homegate to.");
+        			b = true;
+        			while (b) {
+        				System.out.println("\nIs the home already created ? Y/N\n");
+        	    		str = sc.next();
+        	    		if (str.startsWith("Y")) {
+        	    			System.out.println("\nPlease enter the Id of the home.\n");
+        	    			str = sc.next();
+        	    			home.setHomeId(str);
+        	    			str = home.update();
+        	    			System.out.println(str);
+        	    			if (str.startsWith("The home")) {
+        	    				b = false;
+        	    			}
+        	    		}
+        	    		else if (str.startsWith("N")) {
+        	    			System.out.println("\nTherefore, the test will create a home for the homegate to be associated to.\nWrite anything and press Enter to continue.");
+        	    			b = false;
+        	    			str = sc.next();
+        	    			Location location = new Location("44.920675", "4.266843");
+        	    	    	Adress adress = new Adress("30 rue du 19 mars 1962", "30190", "La Calmette", "FR", location);
+        	    	    	Home home2 = new Home("Dorian", "Paret", "1956", "1495", "none", "Europe/Oslo", "Bonjour", adress);
+        	    	    	home.setHome(home2);
+        	    	    	System.out.println(home.postHome());
+        	    		}
+        	    	}
+        	    	home.update();
+        	    	System.out.println(home.addHomegate(homegate));
+        	    	home.update();
+        		}
+        		else if (str.startsWith("N")) {
+        			home.setHomeId(homegate.getHomeId());
+        			home.update();
+        			b = false;
+        		}
+        	}
+    	}
+    	else {
+    		System.out.println("\nThere is no home attached to your homegate. Therefore, we need one.");
+    		b = true;
+			while (b) {
+				System.out.println("\nIs the home already created ? Y/N\n");
+	    		str = sc.next();
+	    		if (str.startsWith("Y")) {
+	    			System.out.println("\nPlease enter the Id of the home.\n");
+	    			str = sc.next();
+	    			home.setHomeId(str);
+	    			str = home.update();
+	    			System.out.println(str);
+	    			if (str.startsWith("The home")) {
+	    				b = false;
+	    			}
+	    		}
+	    		else if (str.startsWith("N")) {
+	    			System.out.println("\nTherefore, the test will create a home for the homegate to be associated to.\nWrite anything and press Enter to continue.");
+	    			b = false;
+	    			str = sc.next();
+	    			Location location = new Location("44.920675", "4.266843");
+	    	    	Adress adress = new Adress("30 rue du 19 mars 1962", "30190", "La Calmette", "FR", location);
+	    	    	Home home2 = new Home("Dorian", "Paret", "1956", "1495", "none", "Europe/Oslo", "Bonjour", adress);
+	    	    	home.setHome(home2);
+	    	    	System.out.println(home.postHome());
+	    		}
+	    	}
+	    	home.update();
+	    	System.out.println(home.addHomegate(homegate));
+	    	home.update();
+    	}
     	System.out.println(home.toString());
-    	System.out.println("\nThe home has been created. We will now associate an user to it.");
+    	home.deleteUsers();
+    	System.out.println("\nWe will now associate an user to it.\n");
     	User user = new User("Dorian", "Paret", "004746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", "dorian.paret@ecl14.ec-lyon.fr");
     	home.update();
     	home.addUser(user);
     	home.update();
     	System.out.println(user.toString());
-    	System.out.println("\nAn user has been associated to the homegate. Now take a look at the device associated to the homegate.");
+    	System.out.println("\nAn user has been associated to the homegate.");
+    	System.out.println("\nNow take a look at the device associated to the homegate.\n");
     	for(Device device : home.getDevices()) {
     		System.out.println(device.toString());
     		System.out.println("\nThis device is associated to the homegate. Do you want to delete it ? It could be added again later. Y/N");

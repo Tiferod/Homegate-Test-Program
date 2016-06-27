@@ -10,6 +10,7 @@ import java.util.Vector;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -51,7 +52,7 @@ public class Home{
 		nbrOfContacts = 0;
 	}
 	
-	public void setHome(Home home) {
+	public void setHome(Home home) throws URISyntaxException {
 		setHomeId(home.homeId);
 		setFirstName(home.firstName);
 		setLastName(home.lastName);
@@ -76,8 +77,9 @@ public class Home{
 		return homeId;
 	}
 	
-	public void setHomeId(String homeId) {
+	public void setHomeId(String homeId) throws URISyntaxException {
 		this.homeId = homeId;
+		link = new URI("http://home-test-api.datek.no/homes/" + homeId);
 	}
 
 	public String getFirstName() {
@@ -161,7 +163,12 @@ public class Home{
 	}
 	
 	public List<Device> getDevices() {
-		return devices;
+		if (numberOfDevices == 0) {
+			return new ArrayList<Device>();
+		}
+		else {
+			return devices;
+		}
 	}
 
 	public void setDevices(List<Device> devices) {
@@ -356,7 +363,7 @@ public class Home{
     	}
     	setLink(new URI(url + "/" + homeId));
     	setHome(restTemplate.getForObject(link, Home.class));
-    	return "The home has been succesfully posted.";
+    	return "The home has been succesfully created.";
 	}
 		
 	public String addHomegate(Homegate homegate) throws URISyntaxException {
@@ -378,7 +385,12 @@ public class Home{
 	        	try {
 		        	restTemplate.exchange(url, HttpMethod.PATCH, request, String.class);
 		        } catch (HttpStatusCodeException e){
-		        	return e.getResponseBodyAsString();
+		        	if (e.getStatusCode() == HttpStatus.BAD_REQUEST && e.getMessage().equals("Homegate already assigned to other home")) {
+		        		return "This homegate is already assigned to another home. Please detach it before choosing a new home.";
+		        	}
+		        	else {
+		        		return e.getResponseBodyAsString();
+		        	}
 		        } catch(RestClientException e){
 		        	return e.getMessage();
 		        }
@@ -471,11 +483,14 @@ public class Home{
     }
 	
 	public String detachHomegate(Homegate homegate) throws URISyntaxException {
-		if (homegate.getLink().toString().lastIndexOf("homes") == -1)  {
+		if (!homegate.gotHome())  {
         	return "This homegate is not attached to a home.";
         }
+		else if (!homegate.getHomeId().equals(homeId)) {
+			return "This homegate is not attached to this home.";
+		}
 		else {
-			URI url = new URI(link + "/homegate/" + homegate.getHomegateId());
+			URI url = new URI(link + "/homegate");
 	    	HttpHeaders headers = new HttpHeaders();
 	        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 	        HttpEntity<String> request = new HttpEntity<String>(headers);
@@ -489,7 +504,7 @@ public class Home{
 	        } catch(RestClientException e){
 	        	return e.getMessage();
 	        }
-	        homegate.setLink(new URI(link + "/homegate"));
+	        homegate.setLink(new URI("http://home-test-api.datek.no/homegates/" + homegate.getHomegateId()));
 	        homegate.setHomegate(restTemplate.getForObject(homegate.getLink(), Homegate.class));
 	        return "The homegate has been succesfully detached to the home.";
         }
@@ -505,12 +520,22 @@ public class Home{
 	    	try {
 	    		setHome(restTemplate.getForObject(new URI(url + "/" + homeId), Home.class));
 	    	} catch (HttpStatusCodeException e){
-	    		return e.getResponseBodyAsString();
+	    		if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+	    			return "\nThere is no home with the Id : " + homeId +".";
+	    		}
+	    		else {
+	    			return e.getResponseBodyAsString();
+	    		}
 	    	} catch(RestClientException e){
 	    		return e.getMessage();
 	    	}
 	    	setLink(new URI(url + "/" + homeId));
-	    	numberOfDevices = devices.size();
+	    	if (devices == null) {
+	    		numberOfDevices = 0;
+	    	}
+	    	else {
+	    		numberOfDevices = devices.size();
+	    	}
 	    	return "The home has been succesfully updated from the server.";
 		}
 	}
@@ -625,5 +650,22 @@ public class Home{
     		System.out.println(e.getMessage());
     		return new ArrayList<Event>();
     	}
+	}
+	
+	public String deleteHome() {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        restTemplate.setRequestFactory(requestFactory);
+		HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+        try {
+        	restTemplate.exchange(link, HttpMethod.DELETE, request, String.class);
+        } catch (HttpStatusCodeException e){
+        	return e.getResponseBodyAsString();
+        } catch(RestClientException e){
+        	return e.getMessage();
+        }
+		return "The home " + homeId + " has been successfully deleted.";
 	}
 }
