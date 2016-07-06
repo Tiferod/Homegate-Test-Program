@@ -420,7 +420,7 @@ public class Home{
         return "The contact has been succesfully added to the home.";
     }
 	
-	public String addUser(User user) throws URISyntaxException {
+	public String addUser(User user) throws URISyntaxException, InterruptedException {
     	URI url = new URI(link + "/users");
     	HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
@@ -433,6 +433,7 @@ public class Home{
         } catch(RestClientException e){
         	return e.getMessage();
         }
+        Thread.sleep(3000);
         update();
         for (User _user : getUsers()) {
         	if (user.getEmail().equals(_user.getEmail())) {

@@ -30,9 +30,13 @@ public class User{
 		this.index = user.index;
 		this.firstName = user.firstName;
 		this.lastName = user.lastName;
-		this.phone = user.phone;
+		if (user.phone != null) {
+			this.phone = user.phone;
+		}
 		this.role = user.role;
-		this.pin = user.pin;
+		if (user.pin != null) {
+			this.pin = user.pin;
+		}
 		this.validFrom = user.validFrom;
 		this.validTo = user.validTo;
 		this.email = user.email;

@@ -19,23 +19,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Homegate{
 
-    private String homegateId, serialNo, description, telNo, simIccid, vendor, model, firmwareVersion, wlanApn, partnerId;
+    private String homegateId, serialNo, description, telNo, simIccid, vendor, model, softwareVersion, wlanApn, wlanIp, partnerId;
     private URI link;
     
     public Homegate() {
     	
     }
 
-	public Homegate(String simIccid, String vendor, String wlanApn, String description,
-			 String model, String firmwareVersion, String telNo, String serialNo) {
+	public Homegate(String simIccid, String vendor, String wlanApn, String wlanIp, String description,
+			 String model, String softwareVersion, String telNo, String serialNo) {
 		this.serialNo = serialNo;
 		this.description = description;
 		this.telNo = telNo;
 		this.simIccid = simIccid;
 		this.vendor = vendor;
 		this.model = model;
-		this.firmwareVersion = firmwareVersion;
+		this.softwareVersion = softwareVersion;
 		this.wlanApn = wlanApn;
+		this.wlanIp = wlanIp;
 	}
 	
 	public boolean createHomegate(String serialNo) throws URISyntaxException {
@@ -57,7 +58,7 @@ public class Homegate{
         	return false;
         }
     	this.setLink(url);
-    	System.out.println("The homegate " + serialNo + " has been found.");
+    	System.out.println("\nThe homegate " + serialNo + " has been found.");
 		return true;
 	}
 	
@@ -69,8 +70,9 @@ public class Homegate{
 		this.simIccid = homegate.simIccid;
 		this.vendor = homegate.vendor;
 		this.model = homegate.model;
-		this.firmwareVersion = homegate.firmwareVersion;
+		this.softwareVersion = homegate.softwareVersion;
 		this.wlanApn = homegate.wlanApn;
+		this.wlanIp = homegate.wlanIp;
 		this.partnerId = homegate.partnerId;
 	}
 
@@ -122,12 +124,12 @@ public class Homegate{
 		this.model = model;
 	}
 
-	public String getFirmwareVersion() {
-		return firmwareVersion;
+	public String getSoftWareVersion() {
+		return softwareVersion;
 	}
 
-	public void setFirmwareVersion(String firmwareVersion) {
-		this.firmwareVersion = firmwareVersion;
+	public void setSoftwareVersion(String softwareVersion) {
+		this.softwareVersion = softwareVersion;
 	}
 
 	public String getWlanApn() {
@@ -136,6 +138,14 @@ public class Homegate{
 
 	public void setWlanApn(String wlanApn) {
 		this.wlanApn = wlanApn;
+	}
+
+	public String getWlanIp() {
+		return wlanIp;
+	}
+
+	public void setWlanIp(String wlanIp) {
+		this.wlanIp = wlanIp;
 	}
 
 	public String getSerialNo() {
@@ -167,8 +177,9 @@ public class Homegate{
                 "\n simIccid = " + simIccid +
                 "\n vendor = " + vendor +
                 "\n model = " + model +
-                "\n firmwareVersion = " + firmwareVersion +
+                "\n softwareVersion = " + softwareVersion +
                 "\n wlanApn = " + wlanApn +
+                "\n wlanIp = " + wlanIp +
                 "\n partnerId = " + partnerId +
                 '\n';
     }

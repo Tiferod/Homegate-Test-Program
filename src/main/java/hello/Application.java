@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class Application implements CommandLineRunner {
     	Homegate homegate = new Homegate();
     	Home home = new Home();
     	while (b) {
-    		System.out.println("\nPlease enter the serial number of the homegate you want to test :");
+    		System.out.println("\nPlease enter the serial number of the homegate you want to test :\n");
     		str = sc.next();
     		if (homegate.createHomegate(str)) {
     			b = false;
@@ -134,11 +135,24 @@ public class Application implements CommandLineRunner {
     	}
     	System.out.println(home.toString());
     	home.deleteUsers();
+    	System.out.println("\nDeleting the users...\n");
+    	Thread.sleep(5000);
     	System.out.println("\nWe will now associate an user to it.\n");
-    	User user = new User("Dorian", "Paret", "004746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", "dorian.paret@ecl14.ec-lyon.fr");
+    	char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    	StringBuilder sb = new StringBuilder();
+    	Random random = new Random();
+    	for (int i = 0; i < 10; i++) {
+    	    char c = chars[random.nextInt(chars.length)];
+    	    sb.append(c);
+    	}
+    	String email = sb.toString();
+    	User user = new User("Oscar", "Bergan", "+4746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", email + "@gmail.com");
     	home.update();
+    	System.out.println("\nAdding a new user...\n");
     	home.addUser(user);
+    	/*Thread.sleep(5000);
     	home.update();
+    	user = home.getUsers().get(0);*/
     	System.out.println(user.toString());
     	System.out.println("\nAn user has been associated to the homegate.");
     	System.out.println("\nNow take a look at the device associated to the homegate.\n");
