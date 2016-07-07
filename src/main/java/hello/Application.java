@@ -134,23 +134,48 @@ public class Application implements CommandLineRunner {
 	    	home.update();
     	}
     	System.out.println(home.toString());
-    	home.deleteUsers();
-    	System.out.println("\nDeleting the users...\n");
-    	Thread.sleep(5000);
-    	System.out.println("\nWe will now associate an user to it.\n");
-    	char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-    	StringBuilder sb = new StringBuilder();
-    	Random random = new Random();
-    	for (int i = 0; i < 10; i++) {
-    	    char c = chars[random.nextInt(chars.length)];
-    	    sb.append(c);
+    	if (!home.getUsers().isEmpty()) {
+    		System.out.println("\nThis home has already an user.\n");
+    		System.out.println(home.getUsers());
+    		if (home.getUsers().size() == 1) {
+    			System.out.println("\nDo you want to delete it ? Y/N\n");
+    		}
+    		else {
+    			System.out.println("\nDo you want to delete them ? Y/N\n");
+    		}
+    		if (str.startsWith("Y")) {
+    			b = true;
+    			while (b) {
+    				str = sc.next();
+    				if (str.startsWith("Y")) {
+    					b = false;
+    					home.deleteUsers();
+    			    	System.out.println("\nDeleting the users...\n");
+    			    	Thread.sleep(5000);
+    			    	System.out.println("\nWe will now associate an user to it.\n");
+    		        	User user = new User("Oscar", "Bergan", "+4746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", "oscar.bergan@gmail.com");
+    		        	home.update();
+    		        	System.out.println("\nAdding a new user...\n");
+    		        	home.addUser(user);
+    		        	System.out.println(user.toString());
+    				}
+    				else if (str.startsWith("N")) {
+    					b = false;
+    				}
+    				else {
+    					System.out.println("\n Please write 'Y' or 'N' to continue.");
+    				}
+    			}
+    		}
     	}
-    	String email = sb.toString();
-    	User user = new User("Oscar", "Bergan", "+4746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", email + "@gmail.com");
-    	home.update();
-    	System.out.println("\nAdding a new user...\n");
-    	home.addUser(user);
-    	System.out.println(user.toString());
+    	else {
+    		System.out.println("\nWe will now associate an user to it.\n");
+        	User user = new User("Oscar", "Bergan", "+4746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", "oscar.bergan@gmail.com");
+        	home.update();
+        	System.out.println("\nAdding a new user...\n");
+        	home.addUser(user);
+        	System.out.println(user.toString());
+    	}
     	System.out.println("\nAn user has been associated to the homegate.");
     	System.out.println("\nNow take a look at the device associated to the homegate.\n");
     	for(Device device : home.getDevices()) {
@@ -247,10 +272,11 @@ public class Application implements CommandLineRunner {
     					break;
     				case "lightBulb" :
     					home.turnDeviceOff(device);
-    					ProfileActions profileActions = new ProfileActions("on", "off", "on");
+    					Thread.sleep(1000);
+    					/*ProfileActions profileActions = new ProfileActions("on", "off", "on");
     					device.setProfileActions(profileActions);
     					System.out.println("\nWe have set some ProfileActions to this lightBulb for further testing. When you will arm the alarm, the lightBulb should turn on. When you will disarm the alarm, the lightBulb should turn off.");
-    					System.out.println("\nIn order to test it, please turn it on.");
+    					*/System.out.println("\nIn order to test it, please turn it on.");
     					Thread.sleep(5000);
     					home.update();
     					device = home.updateDevice(device);

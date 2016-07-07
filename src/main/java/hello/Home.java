@@ -306,7 +306,7 @@ public class Home{
 			} catch(RestClientException e){
 				return e.getMessage();
 			}
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		}
 		return "All the " + numberOfDevices + " devices are identifying themselves.";
 	}
