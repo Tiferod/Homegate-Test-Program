@@ -150,9 +150,6 @@ public class Application implements CommandLineRunner {
     	home.update();
     	System.out.println("\nAdding a new user...\n");
     	home.addUser(user);
-    	/*Thread.sleep(5000);
-    	home.update();
-    	user = home.getUsers().get(0);*/
     	System.out.println(user.toString());
     	System.out.println("\nAn user has been associated to the homegate.");
     	System.out.println("\nNow take a look at the device associated to the homegate.\n");
@@ -205,7 +202,6 @@ public class Application implements CommandLineRunner {
     	System.out.println("Sometimes, the devices could take some time to react. Don't worry.");
     	System.out.println("\nThe devices are now identifying themselves...");
     	System.out.println(home.identifyDevices());
-    	Thread.sleep(60000);
     	System.out.println("\nThe identification should be finished. If so, write anything and press Enter to continue. If not, please wait until the end.");
     	str = sc.next();
     	LocalDateTime startDate = LocalDateTime.now();
@@ -213,7 +209,7 @@ public class Application implements CommandLineRunner {
     	Event disarmEvent = new Event();
     	for (Device device : home.getDevices()) {
     		home.update();
-    		if (device.getProductType().equals("null")) {
+    		if (device.getProductType() == null) {
     			System.out.println("\nOne of your devices has not been recognized well. You should reset and reconnect it to the homegate again.");
     		}
     		else {

@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
   <jar>E:\Workspace\Homegate-Test-Program\target\Homegate_Test_Program-1.0.jar</jar>
-  <outfile>E:\Workspace\Homegate-Test-Program\target\Homegate_Test_Program-1.0.exe</outfile>
+  <outfile>E:\Workspace\Homegate-Test-Program\target\Homegate_Test_Program 1.0.1.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -14,10 +14,6 @@
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
   <icon></icon>
-  <singleInstance>
-    <mutexName>Homegate Test Program</mutexName>
-    <windowTitle>Homegate Test Program</windowTitle>
-  </singleInstance>
   <jre>
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
