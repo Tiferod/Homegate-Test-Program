@@ -239,9 +239,9 @@ public class Application implements CommandLineRunner {
     		}
     		else {
     			System.out.println("\nWe have detected that one of your devices is a " + device.getProductType() + ". Do you want to test it ? Y/N");
-    			startDate = LocalDateTime.now();
     			str = sc.next();
     			if (str.startsWith("Y")) {
+    				startDate = LocalDateTime.now();
     				b = true;
     				switch(device.getProductType()) {
     				case "keyPad" :
@@ -296,7 +296,7 @@ public class Application implements CommandLineRunner {
     					break;
     				case "detectorPet" :   			
     					System.out.println("\nIn order to test it, please move something in front of it.");
-    					while (device.getEndpoints().get(0).getCluster("iasZone").getAttributes().get(0).getValue().equals("16")  && device.getEndpoints().get(0).getCluster("iasZone").getAttributes().get(0).getUpdatedTime().isBefore(startDate)) {
+    					while (device.getEndpoints().get(0).getCluster("iasZone").getAttributes().get(0).getValue().equals("16")  && device.getEndpoints().get(0).getCluster("iasZone").getAttributes().get(0).getUpdatedTime().isAfter(startDate)) {
     						Thread.sleep(1000);
     						home.update();
     						device = home.updateDevice(device);
