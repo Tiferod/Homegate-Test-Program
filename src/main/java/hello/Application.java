@@ -143,28 +143,26 @@ public class Application implements CommandLineRunner {
     		else {
     			System.out.println("\nDo you want to delete them ? Y/N\n");
     		}
-    		if (str.startsWith("Y")) {
-    			b = true;
-    			while (b) {
-    				str = sc.next();
-    				if (str.startsWith("Y")) {
-    					b = false;
-    					home.deleteUsers();
-    			    	System.out.println("\nDeleting the users...\n");
-    			    	Thread.sleep(5000);
-    			    	System.out.println("\nWe will now associate an user to it.\n");
-    		        	User user = new User("Oscar", "Bergan", "+4746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", "oscar.bergan@gmail.com");
-    		        	home.update();
-    		        	System.out.println("\nAdding a new user...\n");
-    		        	home.addUser(user);
-    		        	System.out.println(user.toString());
-    				}
-    				else if (str.startsWith("N")) {
-    					b = false;
-    				}
-    				else {
-    					System.out.println("\n Please write 'Y' or 'N' to continue.");
-    				}
+    		b = true;
+    		while (b) {
+    			str = sc.next();
+    			if (str.startsWith("Y")) {
+    				b = false;
+    				home.deleteUsers();
+    				System.out.println("\nDeleting the users...\n");
+    				Thread.sleep(5000);
+    				System.out.println("\nWe will now associate an user to it.\n");
+    				User user = new User("Oscar", "Bergan", "+4746620851", "master", "1857", "2016-05-10T11:00:00+0000", "2026-05-10T11:00:00+0000", "oscar.bergan@gmail.com");
+    				home.update();
+    				System.out.println("\nAdding a new user...\n");
+    				home.addUser(user);
+    				System.out.println(user.toString());
+    			}
+    			else if (str.startsWith("N")) {
+    				b = false;
+    			}
+    			else {
+    				System.out.println("\n Please write 'Y' or 'N' to continue.");
     			}
     		}
     	}

@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>E:\Workspace\Homegate-Test-Program\target\Homegate_Test_Program-1.0.3.jar</jar>
-  <outfile>E:\Workspace\Homegate-Test-Program\target\Homegate_Test_Program 1.0.3.exe</outfile>
+  <jar>E:\Workspace\Homegate-Test-Program\target\Homegate_Test_Program-1.0.4.jar</jar>
+  <outfile>Homegate_Test_Program 1.0.4.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
